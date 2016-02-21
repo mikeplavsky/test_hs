@@ -1,5 +1,18 @@
 import System.Environment
 
+data Next a = Super a | Normal a deriving Show
+
+instance Functor Next where
+   fmap f (Super a) = Super (f a)
+   fmap f (Normal a) = Super (f a)
+
+instance Applicative Next where
+    pure = Super
+    Super f <*> m = fmap f m
+
+instance Monad Next where 
+    (>>=) (Super a) f = f a
+
 fib_s = 1 : 1 : [a + b | (a,b) <- zip fib_s $ tail fib_s]
 
 getH = do
