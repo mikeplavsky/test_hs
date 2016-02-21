@@ -1,1 +1,4 @@
-main = putStr "Yep, I am here!"
+main = do 
+    putStrLn "Print it up!"
+    l <- getLine
+    putStrLn $ "Yep, I am here! " ++ l ++ "!"
