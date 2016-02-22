@@ -3,8 +3,12 @@ import Control.Lens
 
 projects = "https://www.pivotaltracker.com/services/v5/projects"
 
-get_projects = do
+get_projects tk = do
     r <- get projects
     return  r
 
-main = get_projects
+token = "ABCD"
+
+main = do 
+    r <-(get_projects token)
+    putStrLn $ show $ r ^. responseStatus
