@@ -8,7 +8,8 @@ instance Functor Result where
 
 instance Applicative Result where
     pure = Data
-    (<*>) (Data f) (Data a) = Data (f a)
+    Data f <*> Data a = Data (f a)
 
 instance Monad Result where
-    (>>=) (Data a) f = f a
+    Data a >>= f = f a
+    Error (a,s) >>= _ = Error (a,s)
