@@ -1,6 +1,6 @@
 import System.Environment
 
-data Next a = Super a | Normal a deriving Show
+data Next a = Super a | Normal a | Error deriving Show
 
 instance Functor Next where
    fmap f (Super a) = Super (f a)
@@ -11,6 +11,7 @@ instance Applicative Next where
     Super f <*> m = fmap f m
 
 instance Monad Next where 
+    Error >>= _ = Error 
     (>>=) (Super a) f = f a
 
 fib_s = 1 : 1 : [a + b | (a,b) <- zip fib_s $ tail fib_s]

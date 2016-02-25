@@ -1,7 +1,8 @@
-data Result a = Data a | Error (a, String) deriving Show
+data Result a = Data a | Error (Int, String) deriving Show
 
-getIt (-1) = Error(-1, "too negative")
-getIt a = Data a
+getIt a 
+    | a < 0 = Error(0,show a ++ " too negative")
+    | otherwise = Data a
 
 instance Functor Result where
     fmap f (Data a) = Data (f a) 
@@ -12,4 +13,4 @@ instance Applicative Result where
 
 instance Monad Result where
     Data a >>= f = f a
-    Error (a,s) >>= _ = Error (a,s)
+    Error (i,s) >>= _ = Error (i+1,s) 
