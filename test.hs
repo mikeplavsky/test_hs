@@ -1,5 +1,12 @@
 import System.Environment
 
+data Fruit = Apple | Orange deriving Show
+
+instance Eq Fruit where
+   Apple == Apple = True
+   Orange == Orange = True
+   _ == _ = False
+
 data Next a = Super a | Normal a | Error deriving Show
 
 instance Functor Next where
