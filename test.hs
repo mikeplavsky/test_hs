@@ -2,6 +2,9 @@ import System.Environment
 
 data Fruit = Apple | Orange deriving Show
 
+class BasicEq a where
+    isEqual :: a -> a -> Bool
+
 instance Eq Fruit where
    Apple == Apple = True
    Orange == Orange = True
