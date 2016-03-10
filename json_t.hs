@@ -3,6 +3,7 @@
 import Data.Aeson
 import GHC.Generics
 import Data.Text
+import Data.Maybe
 import Data.ByteString.Lazy as L
 
 data Person = 
@@ -14,5 +15,6 @@ instance ToJSON Person
 
 readJ = do 
     p <- L.readFile "test.json"
-    let j1 = decode p :: Maybe Person
-        in return j1
+    let j = decode p :: Maybe Person
+        a = fromJust j
+        in return $ (name a, age a)
