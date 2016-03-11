@@ -18,3 +18,7 @@ readJ = do
     let j = decode p :: Maybe Person
         a = fromJust j
         in return $ (name a, age a)
+
+readAJ = do
+    p <- L.readFile "testA.json"
+    return p
