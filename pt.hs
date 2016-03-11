@@ -3,7 +3,7 @@
 
 import Network.Wreq
 import Control.Lens
-import Data.Aeson (Array, FromJSON, ToJSON)
+import Data.Aeson (Array, FromJSON, ToJSON, decode)
 import Data.Text
 import GHC.Generics
 
@@ -31,5 +31,6 @@ get_projects tk =
     in do getWith opts projects
 
 get_data r = r ^. responseBody
+get_ps r = decode r :: Maybe [Project]
 
 
