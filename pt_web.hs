@@ -8,7 +8,7 @@ import Data.Text
 import GHC.Generics
 
 pt_url = "https://www.pivotaltracker.com/services/v5/projects"
-pt_stories = pt_url ++ "/1367594/iterations?offset=0" 
+pt_stories = pt_url ++ "/1367594/iterations?offset=" 
 
 data Story = Story {
       name :: Text
@@ -17,15 +17,17 @@ data Story = Story {
 instance FromJSON Story
 
 data Iteration = Iteration {
+      start :: Text,
+      finish :: Text,
       stories :: [Story]
   } deriving (Show, Generic)
 
 instance FromJSON Iteration
 
-get_raw_stories tk =
+get_raw tk offset =
     let opts = defaults & header "X-TrackerToken" .~ [tk]
-    in do getWith opts pt_stories
+    in do getWith opts $ pt_stories ++ offset
 
-get_stories s = 
+get_iterations s = 
     let d = s ^. responseBody
     in decode d :: Maybe [Iteration]
