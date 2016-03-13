@@ -24,6 +24,7 @@ get_burndown tk start_date release_name = do
 
     let finish_d = find_finish_date release_name its
         f_its = release_iterations its start_date finish_d 
+
     return $ done_iterations f_its
 
 data Story = Story {
