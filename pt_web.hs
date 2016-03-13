@@ -16,9 +16,11 @@ pt_url = "https://www.pivotaltracker.com/services/v5/projects"
 pt_stories = pt_url ++ "/1367594/iterations?offset=" 
 
 start_date = get_time $ pack "2015-10-01T21:00:00Z" 
+release_name = "ODME RTM 1.9"
 
 data Story = Story {
       name :: Text,
+      story_type :: Text,
       estimate :: Maybe Int
   } deriving (Eq, Show, Generic)
 
@@ -73,3 +75,12 @@ iterations_total its =
 
 from_start its start_t =
     L.filter (\i -> (get_time $ start i) >= start_t) its
+
+find_release release_n sts = 
+    L.filter (\s -> 
+        (story_type s == "release") && 
+        ((unpack $ name s)== release_n)) sts
+
+find_finish_date release_n its = 
+    finish $ L.head $ L.filter (\i -> 
+        (L.length $ find_release release_n $ stories i) /= 0) its 
