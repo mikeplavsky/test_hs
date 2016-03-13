@@ -18,20 +18,28 @@ pt_stories = pt_url ++ "/1367594/iterations?offset="
 start_date = get_time $ pack "2015-10-01T21:00:00Z" 
 release_name = "ODME RTM 1.9"
 
+get_burndown tk start_date release_name = do
+
+    its <- get_all_iterations tk    
+
+    let finish_d = find_finish_date release_name its
+        f_its = release_iterations its start_date finish_d 
+    return $ done_iterations f_its
+
 data Story = Story {
-      name :: Text,
-      story_type :: Text,
-      current_state :: Text,
-      estimate :: Maybe Int
-  } deriving (Eq, Show, Generic)
+    name :: Text,
+    story_type :: Text,
+    current_state :: Text,
+    estimate :: Maybe Int
+} deriving (Eq, Show, Generic)
 
 instance FromJSON Story
 
 data Iteration = Iteration {
-      start :: Text,
-      finish :: Text,
-      stories :: [Story]
-  } deriving (Eq, Show, Generic)
+    start :: Text,
+    finish :: Text,
+    stories :: [Story]
+} deriving (Eq, Show, Generic)
 
 instance FromJSON Iteration
 
