@@ -94,4 +94,8 @@ find_finish_date release_n its =
     get_time $ finish $ L.head $ L.filter (\i -> 
         (L.length $ find_release release_n $ stories i) /= 0) its 
 
+done_iterations its = 
+    L.map (\i -> 
+        ((finish i),(stories_done (stories i)))) its
+
 
