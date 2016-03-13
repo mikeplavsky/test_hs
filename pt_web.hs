@@ -16,7 +16,8 @@ pt_url = "https://www.pivotaltracker.com/services/v5/projects"
 pt_stories = pt_url ++ "/1367594/iterations?offset=" 
 
 data Story = Story {
-      name :: Text
+      name :: Text,
+      estimate :: Maybe Int
   } deriving (Eq, Show, Generic)
 
 instance FromJSON Story
