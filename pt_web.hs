@@ -10,6 +10,7 @@ import Data.Maybe
 import qualified Data.ByteString as S
 import qualified GHC.List as L
 import qualified Control.Monad as M
+import Data.DateTime
 
 pt_url = "https://www.pivotaltracker.com/services/v5/projects"
 pt_stories = pt_url ++ "/1367594/iterations?offset=" 
@@ -58,3 +59,4 @@ get_all_iterations tk = do
     let s = L.reverse its
     return $ M.join s 
 
+get_time t = parseDateTime "%Y-%m-%dT%H:%M:%SZ" $ unpack t
