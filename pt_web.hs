@@ -20,10 +20,12 @@ data Iteration = Iteration {
       stories :: [Story]
   } deriving (Show, Generic)
 
+instance FromJSON Iteration
+
 get_raw_stories tk =
     let opts = defaults & header "X-TrackerToken" .~ [tk]
     in do getWith opts pt_stories
 
 get_stories s = 
     let d = s ^. responseBody
-    in decode d :: Maybe [Story]
+    in decode d :: Maybe [Iteration]
