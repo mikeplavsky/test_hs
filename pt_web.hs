@@ -73,8 +73,10 @@ stories_total sts =
 iterations_total its =
     L.foldl (\acc i -> acc + (stories_total $ stories i)) 0 its
 
-from_start its start_t =
-    L.filter (\i -> (get_time $ start i) >= start_t) its
+release_iterations its start_t finish_t =
+    L.filter (\i -> 
+        ((get_time $ start i) >= start_t) && 
+        ((get_time $ finish i) <= finish_t)) its
 
 find_release release_n sts = 
     L.filter (\s -> 
@@ -82,5 +84,5 @@ find_release release_n sts =
         ((unpack $ name s)== release_n)) sts
 
 find_finish_date release_n its = 
-    finish $ L.head $ L.filter (\i -> 
+    get_time $ finish $ L.head $ L.filter (\i -> 
         (L.length $ find_release release_n $ stories i) /= 0) its 
