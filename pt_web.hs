@@ -61,3 +61,9 @@ get_all_iterations tk = do
     return $ M.join s 
 
 get_time t = parseDateTime "%Y-%m-%dT%H:%M:%SZ" $ unpack t
+
+stories_total sts = 
+    L.foldl (\acc s -> acc + (fromMaybe 0 $ estimate s)) 0 sts
+
+get_total [] r = r
+get_total (h:t) r = get_total t r
