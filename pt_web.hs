@@ -21,6 +21,7 @@ release_name = "ODME RTM 1.9"
 data Story = Story {
       name :: Text,
       story_type :: Text,
+      current_state :: Text,
       estimate :: Maybe Int
   } deriving (Eq, Show, Generic)
 
@@ -70,6 +71,12 @@ get_time t =
 stories_total sts = 
     L.foldl (\acc s -> acc + (fromMaybe 0 $ estimate s)) 0 sts
 
+stories_done sts = 
+    L.foldl (\acc s -> 
+        if (unpack $ current_state s) == "accepted" 
+        then acc + (fromMaybe 0 $ estimate s)
+        else acc) 0 sts
+
 iterations_total its =
     L.foldl (\acc i -> acc + (stories_total $ stories i)) 0 its
 
@@ -86,3 +93,5 @@ find_release release_n sts =
 find_finish_date release_n its = 
     get_time $ finish $ L.head $ L.filter (\i -> 
         (L.length $ find_release release_n $ stories i) /= 0) its 
+
+
