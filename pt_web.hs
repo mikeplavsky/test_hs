@@ -33,15 +33,14 @@ get_iterations s =
     let d = s ^. responseBody
     in decode d :: Maybe [Iteration]
 
-get_all tk offset its more
+get_all tk offset its = do
 
-    | not more = do return its
-    | more = do 
-        
         s <- get_raw tk offset 
         let i = fromJust $ get_iterations s 
 
+        putStrLn $ show offset
+
         if i == []
-          then get_all tk offset its False
-          else get_all tk (offset + 10) (i:its) True
+          then return its 
+          else get_all tk (offset + 10) (i:its)
 
