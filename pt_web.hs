@@ -35,7 +35,7 @@ get_iterations s =
 
 get_all tk offset its more
 
-    | not more = its
+    | not more = do return its
     | more = do 
         
         s <- get_raw tk offset 
@@ -43,5 +43,5 @@ get_all tk offset its more
 
         if i == []
           then get_all tk offset its False
-          else get_all tk (offset + 10) its True
+          else get_all tk (offset + 10) (i:its) True
 
