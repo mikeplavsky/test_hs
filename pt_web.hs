@@ -15,6 +15,8 @@ import Data.DateTime
 pt_url = "https://www.pivotaltracker.com/services/v5/projects"
 pt_stories = pt_url ++ "/1367594/iterations?offset=" 
 
+start_date = get_time $ pack "2015-10-01T21:00:00Z" 
+
 data Story = Story {
       name :: Text,
       estimate :: Maybe Int
@@ -60,10 +62,14 @@ get_all_iterations tk = do
     let s = L.reverse its
     return $ M.join s 
 
-get_time t = parseDateTime "%Y-%m-%dT%H:%M:%SZ" $ unpack t
+get_time t = 
+    fromJust $ parseDateTime "%Y-%m-%dT%H:%M:%SZ" $ unpack t
 
 stories_total sts = 
     L.foldl (\acc s -> acc + (fromMaybe 0 $ estimate s)) 0 sts
 
 iterations_total its =
     L.foldl (\acc i -> acc + (stories_total $ stories i)) 0 its
+
+from_start its start_t =
+    L.filter (\i -> (get_time $ start i) >= start_t) its
