@@ -22,6 +22,13 @@ pt_stories = pt_url ++ "/1367594/iterations?offset="
 start_date = get_time $ pack "2015-10-01T21:00:00Z" 
 release_name = "ODME RTM 1.9"
 
+print_burndown start_date release_name = do
+
+    b <- get_burndown start_date release_name 
+
+    mapM_ (\(x,y) -> 
+        putStrLn $ show x ++ "\t" ++ show y) b
+
 get_burndown start_date release_name = do
 
     tk <- pt_tk
