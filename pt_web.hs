@@ -19,12 +19,18 @@ pt_tk = getEnv "PT_TOKEN"
 pt_url = "https://www.pivotaltracker.com/services/v5/projects"
 pt_stories = pt_url ++ "/1367594/iterations?offset=" 
 
-start_date = get_time $ pack "2015-10-01T21:00:00Z" 
-release_name = "ODME RTM 1.9"
+pt_start_date = do 
+    d <- getEnv "PT_START_DATE"
+    return $ get_time $ pack d
+ 
+pt_release_name = getEnv "PT_RELEASE_NAME"
 
-print_burndown start_date release_name = do
+print_burndown = do
 
-    b <- get_burndown start_date release_name 
+    rn <- pt_release_name
+    sd <- pt_start_date
+
+    b <- get_burndown sd rn 
 
     mapM_ (\(x,y) -> 
         putStrLn $ show x ++ "\t" ++ show y) b
