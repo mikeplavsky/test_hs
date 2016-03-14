@@ -17,7 +17,10 @@ import System.Environment
 pt_tk = getEnv "PT_TOKEN"
 
 pt_url = "https://www.pivotaltracker.com/services/v5/projects"
-pt_stories = pt_url ++ "/1367594/iterations?offset=" 
+
+pt_stories = do 
+    pt_project_id <- getEnv "PT_PROJECT_ID"
+    return $ pt_url ++ "/" ++ pt_project_id ++ "/iterations?offset=" 
 
 pt_start_date = do 
     d <- getEnv "PT_START_DATE"
@@ -25,13 +28,16 @@ pt_start_date = do
  
 pt_release_name = getEnv "PT_RELEASE_NAME"
 
+main = print_burndown
+
 print_burndown = do
 
     rn <- pt_release_name
     sd <- pt_start_date
 
-    b <- get_burndown sd rn 
+    (t,b) <- get_burndown sd rn 
 
+    putStrLn $ "Total: " ++ show t
     mapM_ (\(x,y) -> 
         putStrLn $ show x ++ "\t" ++ show y) b
 
@@ -43,7 +49,7 @@ get_burndown start_date release_name = do
     let finish_d = find_finish_date release_name its
         f_its = release_iterations its start_date finish_d 
 
-    return $ done_iterations f_its
+    return $ (iterations_total f_its, done_iterations f_its)
 
 data Story = Story {
     name :: Text,
@@ -62,9 +68,12 @@ data Iteration = Iteration {
 
 instance FromJSON Iteration
 
-get_raw tk offset =
+get_raw tk offset = do
+
     let opts = defaults & header "X-TrackerToken" .~ [tk]
-    in do getWith opts $ pt_stories ++ (show offset)
+
+    stories <- pt_stories      
+    getWith opts $ stories ++ (show offset)
 
 get_iterations s = 
     let d = s ^. responseBody
