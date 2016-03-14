@@ -8,9 +8,13 @@ import Data.Text
 import GHC.Generics
 import Data.Maybe
 import qualified Data.ByteString as S
+import qualified Data.ByteString.Char8 as C
 import qualified GHC.List as L
 import qualified Control.Monad as M
 import Data.DateTime
+import System.Environment
+
+pt_tk = getEnv "PT_TOKEN"
 
 pt_url = "https://www.pivotaltracker.com/services/v5/projects"
 pt_stories = pt_url ++ "/1367594/iterations?offset=" 
@@ -18,9 +22,10 @@ pt_stories = pt_url ++ "/1367594/iterations?offset="
 start_date = get_time $ pack "2015-10-01T21:00:00Z" 
 release_name = "ODME RTM 1.9"
 
-get_burndown tk start_date release_name = do
+get_burndown start_date release_name = do
 
-    its <- get_all_iterations tk    
+    tk <- pt_tk
+    its <- get_all_iterations $ C.pack tk    
 
     let finish_d = find_finish_date release_name its
         f_its = release_iterations its start_date finish_d 
