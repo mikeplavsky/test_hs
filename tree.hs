@@ -11,15 +11,16 @@ number (Branch l r) s =
         (r',s'') = number r s'
     in (Branch l' r', s'')    
 
+return' x = Just x
+(>>=>>) x f = 
+    case x of 
+        Nothing -> Nothing
+        Just a -> f a
 
-zipTree (Leaf a) (Leaf b) = Just(Leaf (a, b))
+zipTree (Leaf a) (Leaf b) = return' $ Leaf (a, b)
 
 zipTree (Branch l r) (Branch l' r') = 
-     case zipTree l l' of 
-         Nothing -> Nothing
-         Just l'' ->
-             case zipTree r r' of 
-                 Nothing -> Nothing
-                 Just r'' -> Just (Branch l'' r'')
+    zipTree l l' >>=>> \l'' ->  
+    zipTree r r' >>=>> \r'' -> return' $ Branch l'' r''
 
 zipTree _ _ = Nothing
