@@ -10,3 +10,8 @@ number (Branch l r) s =
     let (l',s') = number l s
         (r',s'') = number r s'
     in (Branch l' r', s'')    
+
+
+zipTree (Leaf a) (Leaf b) = Leaf (a, b)
+zipTree (Branch l r) (Branch l' r') = 
+     Branch (zipTree l l') (zipTree r r')
