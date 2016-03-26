@@ -12,6 +12,14 @@ number (Branch l r) s =
     in (Branch l' r', s'')    
 
 
-zipTree (Leaf a) (Leaf b) = Leaf (a, b)
+zipTree (Leaf a) (Leaf b) = Just(Leaf (a, b))
+
 zipTree (Branch l r) (Branch l' r') = 
-     Branch (zipTree l l') (zipTree r r')
+     case zipTree l l' of 
+         Nothing -> Nothing
+         Just l'' ->
+             case zipTree r r' of 
+                 Nothing -> Nothing
+                 Just r'' -> Just (Branch l'' r'')
+
+zipTree _ _ = Nothing
