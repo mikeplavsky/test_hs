@@ -7,7 +7,12 @@ instance Functor Tree where
     
 -- number part
 
-return'' x = \s -> (x,s)
+type State s a = s -> (a,s)
+
+return'' :: a -> State s a
+return'' a = \s -> (a,s)
+
+(>>>=>>>) :: State s a -> (a -> State s b) -> State s b
 (>>>=>>>) x f = \s -> let (a,s') = x s in f a s'
 
 number' (Branch l r) = 
