@@ -35,9 +35,11 @@ number (Branch l r) s =
 
 -- zip part
 
-zipTree (Leaf a) (Leaf b) = return (Leaf (a, b))
+zipTree (Leaf a) (Leaf b) = return $ Leaf (a, b)
 
-zipTree (Branch l r) (Branch l' r') = 
-    liftM2 Branch (zipTree l l') (zipTree r r')
+zipTree (Branch l r) (Branch l' r') = do
+    l'' <- zipTree l l'
+    r'' <- zipTree r r'
+    return $ Branch l'' r''
 
 zipTree _ _ = Nothing
