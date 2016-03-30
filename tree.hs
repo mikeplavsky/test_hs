@@ -1,3 +1,5 @@
+import Control.Monad
+
 data Tree a = Leaf a | Branch (Tree a) (Tree a) 
     deriving (Show, Eq)
 
@@ -36,8 +38,6 @@ number (Branch l r) s =
 zipTree (Leaf a) (Leaf b) = return (Leaf (a, b))
 
 zipTree (Branch l r) (Branch l' r') = 
-    zipTree l l' >>= \l'' ->  
-    zipTree r r' >>= \r'' -> 
-    return (Branch l'' r'')
+    liftM2 Branch (zipTree l l') (zipTree r r')
 
 zipTree _ _ = Nothing
