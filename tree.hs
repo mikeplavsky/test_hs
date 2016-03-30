@@ -33,17 +33,11 @@ number (Branch l r) s =
 
 -- zip part
 
-return' x = Just x
-(>>=>>) x f = 
-    case x of 
-        Nothing -> Nothing
-        Just a -> f a
-
-zipTree (Leaf a) (Leaf b) = return' $ Leaf (a, b)
+zipTree (Leaf a) (Leaf b) = return (Leaf (a, b))
 
 zipTree (Branch l r) (Branch l' r') = 
-    zipTree l l' >>=>> \l'' ->  
-    zipTree r r' >>=>> \r'' -> 
-    return' $ Branch l'' r''
+    zipTree l l' >>= \l'' ->  
+    zipTree r r' >>= \r'' -> 
+    return (Branch l'' r'')
 
 zipTree _ _ = Nothing
