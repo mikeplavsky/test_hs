@@ -10,14 +10,16 @@ parMap' f (a:as) = do
 
     return (b:bs)
 
-fib = 1:1:[x+y | (x,y) <- zip fib (tail fib)] 
+get x = 
+    let fib = 1:1:[x+y | (x,y) <- zip fib (tail fib)]
+    in fib !! x
 
 main' f = do
 
     file <- readFile f
 
     let ds = map read $ lines file  :: [Int]
-    let w = runEval (parMap' ((!!) fib) ds) 
+    let w = runEval (parMap' get ds) 
 
     return w
 
